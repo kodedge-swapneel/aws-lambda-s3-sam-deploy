@@ -19,7 +19,6 @@ Resources:
       Timeout: 30
       Policies:
         - AWSLambdaBasicExecutionRole
-        - AmazonS3ReadOnlyAccess
       Events:
         S3Event:
           Type: S3
