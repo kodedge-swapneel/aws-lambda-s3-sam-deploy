@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: SAM template to create Lambda function and S3 bucket with event notifications
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: yt-demo-bucket-89745
+      AccessControl: Private
+
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: LambdaFunctionForYTDemo
+      Handler: org.example.LambdaS3SamDeploy::handleRequest
+      CodeUri: build/distributions/aws-lambda-s3-sam-deploy.zip
+      Runtime: java11
+      Timeout: 30
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3ReadOnlyAccess
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket: !Ref S3Bucket
+            Events:
+              - s3:ObjectCreated:*
+              - s3:ObjectRemoved:*
